@@ -9,8 +9,11 @@ products = {
     "rice":      {"cal": 370, "p": 8,  "f": 1,  "c": 85},
     "pasta":     {"cal": 350, "p": 12, "f": 2,  "c": 70},
     "buckwheat": {"cal": 350, "p": 13, "f": 2,  "c": 70},
-    "tuna":      {"cal": 100, "p": 25, "f": 2,  "c": 0},
-    "yoghurt":   {"cal": 670, "p": 28, "f": 26, "c": 70},
+    "tuna":      {"cal": 100, "p": 25, "f": 2,  "c": 0, "unit": "pcs"},
+    "yoghurt":   {"cal": 670, "p": 28, "f": 26, "c": 70, "unit": "pcs"},
+    "egg":       {"cal": 80,  "p": 6,  "f": 5,  "c": 1, "unit": "pcs"},
+    "bread":     {"cal": 85,  "p": 4,  "f": 1,  "c": 15, "unit": "pcs"},
+    "banana":    {"cal": 100, "p": 1,  "f": 1,  "c": 25, "unit": "pcs"},
 }
 
 
@@ -51,6 +54,9 @@ def main(page: ft.Page):
         page.update()
 
     def add_food(product_name):
+        data = products[product_name]
+        unit = data["unit"]
+        label = f"Pieces of {product_name} (pcs)" if unit == "pcs" else f"Grams of {product_name} (g)"
 
         def close_dialog(e=None):
             dialog.open = False
@@ -58,14 +64,14 @@ def main(page: ft.Page):
 
         def confirm(e):
             try:
-                grams = float(grams_input.value)
-                if grams <= 0:
+                amount = float(grams_input.value)
+                if amount <= 0:
                     raise ValueError
-                data = products[product_name]
-                total["cal"] += data["cal"] * grams / 100
-                total["p"]   += data["p"]   * grams / 100
-                total["f"]   += data["f"]   * grams / 100
-                total["c"]   += data["c"]   * grams / 100
+                multiplier = amount if unit == "pcs" else amount / 100
+                total["cal"] += data["cal"] * multiplier
+                total["p"]   += data["p"]   * multiplier
+                total["f"]   += data["f"]   * multiplier
+                total["c"]   += data["c"]   * multiplier
                 save_data(total)
                 close_dialog()
                 update_ui()
@@ -74,7 +80,7 @@ def main(page: ft.Page):
                 grams_input.update()
 
         grams_input = ft.TextField(
-            label=f"Grams of {product_name}",
+            label=label,
             keyboard_type=ft.KeyboardType.NUMBER,
             autofocus=True,
             on_submit=confirm,
@@ -108,22 +114,36 @@ def main(page: ft.Page):
 
                 ft.Row(
                     [
-                        ft.Button("🐔 Chicken",   on_click=lambda e: add_food("chicken")),
-                        ft.Button("🍚 Rice",      on_click=lambda e: add_food("rice")),
+                        ft.Button("🍗 Chicken", on_click=lambda e: add_food("chicken")),
+                        ft.Button("🍚 Rice", on_click=lambda e: add_food("rice")),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
                 ft.Row(
                     [
-                        ft.Button("🍝 Pasta",     on_click=lambda e: add_food("pasta")),
+                        ft.Button("🍝 Pasta", on_click=lambda e: add_food("pasta")),
                         ft.Button("🌾 Buckwheat", on_click=lambda e: add_food("buckwheat")),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
                 ft.Row(
                     [
-                        ft.Button("🐟 Tuna",      on_click=lambda e: add_food("tuna")),
-                        ft.Button("🥛 Yoghurt",   on_click=lambda e: add_food("yoghurt")),
+                        ft.Button("🐟 Tuna", on_click=lambda e: add_food("tuna")),
+                        ft.Button("🥛 Yoghurt", on_click=lambda e: add_food("yoghurt")),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                 ft.Row(
+                    [
+                        ft.Button("🥚 Egg", on_click=lambda e: add_food("egg")),
+                        ft.Button("🍞 Bread", on_click=lambda e: add_food("bread")),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+
+                ft.Row(
+                    [
+                        ft.Button("🍌 Banana", on_click=lambda e: add_food("banana")),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
@@ -138,6 +158,5 @@ def main(page: ft.Page):
             spacing=12,
         )
     )
-
 
 ft.run(main)
