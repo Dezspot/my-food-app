@@ -5,10 +5,10 @@ import os
 DATA_FILE = "data.json"
 
 products = {
-    "chicken":   {"cal": 150, "p": 20, "f": 15, "c": 2},
-    "rice":      {"cal": 370, "p": 8,  "f": 1,  "c": 85},
-    "pasta":     {"cal": 350, "p": 12, "f": 2,  "c": 70},
-    "buckwheat": {"cal": 350, "p": 13, "f": 2,  "c": 70},
+    "chicken":   {"cal": 150, "p": 20, "f": 15, "c": 2, "unit": "g"},
+    "rice":      {"cal": 370, "p": 8,  "f": 1,  "c": 85, "unit": "g"},
+    "pasta":     {"cal": 350, "p": 12, "f": 2,  "c": 70, "unit": "g"},
+    "buckwheat": {"cal": 350, "p": 13, "f": 2,  "c": 70, "unit": "g"},
     "tuna":      {"cal": 100, "p": 25, "f": 2,  "c": 0, "unit": "pcs"},
     "yoghurt":   {"cal": 670, "p": 28, "f": 26, "c": 70, "unit": "pcs"},
     "egg":       {"cal": 80,  "p": 6,  "f": 5,  "c": 1, "unit": "pcs"},
